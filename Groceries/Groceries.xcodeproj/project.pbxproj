@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		807515732D5A4061006EF433 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 807515722D5A4061006EF433 /* FirebaseAnalytics */; };
 		807515752D5A4061006EF433 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 807515742D5A4061006EF433 /* FirebaseAuth */; };
+		807515882D5A46F2006EF433 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 807515872D5A46F2006EF433 /* FirebaseFirestore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 			files = (
 				807515732D5A4061006EF433 /* FirebaseAnalytics in Frameworks */,
 				807515752D5A4061006EF433 /* FirebaseAuth in Frameworks */,
+				807515882D5A46F2006EF433 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -40,6 +42,7 @@
 			isa = PBXGroup;
 			children = (
 				8075155B2D5A3E6A006EF433 /* Groceries */,
+				807515862D5A46F2006EF433 /* Frameworks */,
 				8075155A2D5A3E6A006EF433 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -50,6 +53,13 @@
 				807515592D5A3E6A006EF433 /* Groceries.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		807515862D5A46F2006EF433 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -74,6 +84,7 @@
 			packageProductDependencies = (
 				807515722D5A4061006EF433 /* FirebaseAnalytics */,
 				807515742D5A4061006EF433 /* FirebaseAuth */,
+				807515872D5A46F2006EF433 /* FirebaseFirestore */,
 			);
 			productName = Groceries;
 			productReference = 807515592D5A3E6A006EF433 /* Groceries.app */;
@@ -358,6 +369,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 807515712D5A4061006EF433 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
+		};
+		807515872D5A46F2006EF433 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 807515712D5A4061006EF433 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

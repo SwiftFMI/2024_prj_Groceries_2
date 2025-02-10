@@ -14,6 +14,7 @@ struct SignUp: View {
     @State private var password: String = ""
     @State private var confirmPassword: String = ""
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var userController:UserController
     
     var body: some View {
         VStack {
@@ -45,15 +46,36 @@ struct SignUp: View {
                           placeholder: "your_password",
                           isSecureField: true)
                 
-                InputView(text: $confirmPassword,
-                          title: "Confirm Password",
-                          placeholder: "confirm_password",
-                          isSecureField: true)
+                ZStack(alignment:.trailing) {
+                    InputView(text: $confirmPassword,
+                              title: "Confirm Password",
+                              placeholder: "confirm_password",
+                              isSecureField: true)
+                    
+                    if !password.isEmpty && !confirmPassword.isEmpty {
+                        if password == confirmPassword {
+                            Image(systemName: "checkmark.circle.fill")
+                                .imageScale(.large)
+                                .fontWeight(.bold)
+                                .foregroundColor(Color(.systemGreen))
+                        } else {
+                            Image(systemName: "xmark.circle.fill")
+                                .imageScale(.large)
+                                .fontWeight(.bold)
+                                .foregroundColor(Color(.systemRed))
+                        }
+                    }
+                }
                 
                 Spacer()
                 
                 Button {
-                    print("Sign user up")
+                    Task{
+                        try await userController.signUp(withEmail: email,
+                                                        password: password,
+                                                        name: name,
+                                                        surname: surname)
+                    }
                 } label: {
                     HStack{
                         Text("Sign  up")

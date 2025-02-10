@@ -10,8 +10,8 @@ import SwiftUI
 struct SignIn: View {
     
     @State private var email = ""
-    
     @State private var password = ""
+    @EnvironmentObject var userController:UserController
     
     var body: some View {
         NavigationStack {
@@ -40,7 +40,10 @@ struct SignIn: View {
                 .padding(.top,12)
                 
                 Button {
-                    print("Log uuser in")
+                    Task{
+                        try await userController.signIn(withEmail: email,
+                                                        password: password)
+                    }
                 } label: {
                     HStack{
                         Text("Sign In")
@@ -51,6 +54,8 @@ struct SignIn: View {
     
                 }
                 .background(Color(.systemBlue))
+                .disabled(!formIsValid)
+                .opacity(formIsValid ? 1.00 : 0.4)
                 .cornerRadius(30)
                 .padding(.top,24)
                 
@@ -69,6 +74,17 @@ struct SignIn: View {
                 
             }
         }
+    }
+}
+
+extension SignIn : Authenticatable {
+    var formIsValid: Bool {
+        return !email.isEmpty &&
+        email.contains("@") &&
+        !password.isEmpty &&
+        password.count >= 6 &&
+        password.contains(where: { $0.isNumber }) &&
+        password.contains(where: { $0.isLetter })
     }
 }
 
