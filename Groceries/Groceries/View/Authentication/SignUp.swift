@@ -14,7 +14,7 @@ struct SignUp: View {
     @State private var password: String = ""
     @State private var confirmPassword: String = ""
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var userController:UserController
+    @EnvironmentObject var authVieModel:AuthViewModel
     
     var body: some View {
         VStack {
@@ -71,7 +71,7 @@ struct SignUp: View {
                 
                 Button {
                     Task{
-                        try await userController.signUp(withEmail: email,
+                        try await authVieModel.signUp(withEmail: email,
                                                         password: password,
                                                         name: name,
                                                         surname: surname)

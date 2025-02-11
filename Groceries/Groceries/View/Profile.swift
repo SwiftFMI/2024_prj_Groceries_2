@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct Profile: View {
-    @EnvironmentObject var userController: UserController
+    @EnvironmentObject var authViewModel: AuthViewModel
     var body: some View {
-        if let user = userController.user {
+        if let user = authViewModel.user {
             List {
                 Section {
                     HStack {
@@ -36,7 +36,7 @@ struct Profile: View {
                 }
                 Section ("Account") {
                     Button {
-                        userController.signOut()
+                        authViewModel.signOut()
                     } label: {
                         SettingsRowView(imageName: "delete.left.fill",
                                         title: "Sign out",

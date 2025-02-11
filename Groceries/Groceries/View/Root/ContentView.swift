@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var userController: UserController
+    @EnvironmentObject var authViewModel: AuthViewModel
     
     var body: some View {
         Group {
-            if userController.userSession != nil {
+            if authViewModel.userSession != nil {
                 Profile()
             }
             else{

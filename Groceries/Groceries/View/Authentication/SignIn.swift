@@ -11,7 +11,7 @@ struct SignIn: View {
     
     @State private var email = ""
     @State private var password = ""
-    @EnvironmentObject var userController:UserController
+    @EnvironmentObject var authViewModel:AuthViewModel
     
     var body: some View {
         NavigationStack {
@@ -41,7 +41,7 @@ struct SignIn: View {
                 
                 Button {
                     Task{
-                        try await userController.signIn(withEmail: email,
+                        try await authViewModel.signIn(withEmail: email,
                                                         password: password)
                     }
                 } label: {
@@ -83,8 +83,8 @@ extension SignIn : Authenticatable {
         email.contains("@") &&
         !password.isEmpty &&
         password.count >= 6 &&
-        password.contains(where: { $0.isNumber }) &&
-        password.contains(where: { $0.isLetter })
+        password.contains(where: { $0.isNumber })
+//        &&      password.contains(where: { $0.isLetter })
     }
 }
 

@@ -17,10 +17,3 @@ struct User: Identifiable,Codable {
        return  String(name.first ?? " ") + String(surname.first ?? " ")
     }
 }
-
-extension User {
-    static var MOCK_USER = User(id:NSUUID().uuidString,
-                                name:"Kristana",
-                                surname:"Patrashkova",
-                                email:"patrashkova@example.com")
-}

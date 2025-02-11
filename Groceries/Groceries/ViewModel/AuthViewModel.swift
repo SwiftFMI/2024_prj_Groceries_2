@@ -15,7 +15,7 @@ protocol Authenticatable {
 }
 
 @MainActor
-class UserController: ObservableObject {
+class AuthViewModel: ObservableObject {
     @Published var user: User?
     @Published var userSession: FirebaseAuth.User?
     
