@@ -22,6 +22,18 @@ struct HomeView: View {
                     .padding(.horizontal, 20)
                     .padding(.vertical,8)
             }
+            .padding(.top)
+            
+            TitleTextFieldView(title: "Exclusive offer", titleAll: "See All") {
+                         
+            }
+            .padding(.horizontal, 20)
+            
+            ScrollView(.horizontal) {
+                LazyHStack {
+                    //TODO Връзка с offerArr за дисплейване на продукти които са оферта
+                }
+            }
         }
     }
 }

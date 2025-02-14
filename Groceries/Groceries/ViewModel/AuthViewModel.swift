@@ -60,7 +60,7 @@ class AuthViewModel: ObservableObject {
     }
     
     func deleteAccount() {
-        guard let user = Auth.auth().currentUser else { return }
+//        guard let user = Auth.auth().currentUser else { return }
               //TODO
     }
     

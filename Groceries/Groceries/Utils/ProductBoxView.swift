@@ -61,6 +61,7 @@ struct ProductBoxView_Previews: PreviewProvider {
         ProductBoxView(product: .init(name: "Apple",
                                       price: 1.99,
                                       image: "apples",
+                                      categoryName: "Fruits",
                                       brandName: "FreshFruits",
                                       startDate: Date(),
                                       endDate: Calendar.current.date(byAdding: .day, value: 7, to: Date())!,

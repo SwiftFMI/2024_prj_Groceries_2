@@ -12,6 +12,7 @@ struct Product: Identifiable,Codable {
     let id:String
     let name: String
     let price: Double
+    let categoryName:String
     var image: String
     var brandName: String
     var startDate: Date = Date()
@@ -24,6 +25,7 @@ struct Product: Identifiable,Codable {
              name: String,
              price: Double,
              image: String = "",
+         categoryName:String = "",
              brandName: String = "",
              startDate: Date = Date(),
              endDate: Date = Date(),
@@ -32,6 +34,7 @@ struct Product: Identifiable,Codable {
                 self.name = name
                 self.price = price
                 self.image = image
+                self.categoryName = categoryName
                 self.brandName = brandName
                 self.startDate = startDate
                 self.endDate = endDate

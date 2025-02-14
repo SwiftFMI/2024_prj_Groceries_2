@@ -46,7 +46,7 @@ struct MainTabView: View {
                         }
                     }
                 }
-                TabButtonView(title: "Search",
+                TabButtonView(title: "Explore",
                               icon: "magnifyingglass",
                               isSelect: homeViewMOdel.selectTab == 2){
                     DispatchQueue.main.async {
