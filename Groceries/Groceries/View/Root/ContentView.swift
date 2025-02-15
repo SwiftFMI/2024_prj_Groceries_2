@@ -13,7 +13,8 @@ struct ContentView: View {
     var body: some View {
         Group {
             if authViewModel.userSession != nil {
-                HomeView()
+//                HomeView()
+                MainTabView()
             }
             else{
                 SignIn()

@@ -9,28 +9,28 @@ import SwiftUI
 
 struct SearchTextFieldView: View {
     
-    @State var placeholder: String = "Placeholder"
+    var placeholder: String = "Placeholder"
     @Binding var txt: String
     
     var body: some View {
         HStack(spacing: 15) {
-                    
             Image(systemName: "magnifyingglass")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 20, height: 20)
-                   
-                    TextField(placeholder, text: $txt)
-                .       font(.footnote)
-                        .autocapitalization(.none)
-                        .disableAutocorrection(true)
-                        .frame(minWidth: 0, maxWidth: .infinity)
-                }
-                .frame(height: 30)
-                .padding(15)
-                .background(Color.paleGray)
-                .cornerRadius(16)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 20, height: 20)
+            
+            TextField(placeholder, text: $txt)
+                .font(.footnote)
+                .autocapitalization(.none)
+                .disableAutocorrection(true)
+                .frame(minWidth: 0, maxWidth: .infinity)
+        }
+        .frame(height: 30)
+        .padding(15)
+        .background(Color.paleGray)
+        .cornerRadius(16)
     }
+    
 }
 
 struct SearchTextField_Previews: PreviewProvider {

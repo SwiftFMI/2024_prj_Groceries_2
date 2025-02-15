@@ -16,7 +16,7 @@ struct MainTabView: View {
                 HomeView().tag(0)
                 ExploreView().tag(1)
                 ExploreView().tag(2)
-                ExploreView().tag(3)
+                Profile().tag(3)
                 ExploreView().tag(4)
             }
             .onAppear{
@@ -31,37 +31,37 @@ struct MainTabView: View {
                 TabButtonView(title: "Stores",
                               icon: "storefront.fill",
                               isSelect: homeViewModel.selectTab == 0){
-                    DispatchQueue.main.async {
+//                    DispatchQueue.main.async {
                         withAnimation {
                             homeViewModel.selectTab = 0
                         }
-                    }
+//                    }
                 }
                 TabButtonView(title: "Cart",
                               icon: "cart.fill",
                               isSelect: homeViewModel.selectTab == 1){
-                    DispatchQueue.main.async {
+//                    DispatchQueue.main.async {
                         withAnimation {
                             homeViewModel.selectTab = 1
                         }
-                    }
+//                    }
                 }
                 TabButtonView(title: "Explore",
                               icon: "magnifyingglass",
                               isSelect: homeViewModel.selectTab == 2){
-                    DispatchQueue.main.async {
+//                    DispatchQueue.main.async {
                         withAnimation {
                             homeViewModel.selectTab = 2
                         }
-                    }
+//                    }
                 }
                 TabButtonView(title: "Account",
                               icon: "person.crop.circle",
                               isSelect: homeViewModel.selectTab == 3){
-                    DispatchQueue.main.async {
+//                    DispatchQueue.main.async {
                         withAnimation {
                             homeViewModel.selectTab = 3
-                        }
+//                        }
                     }
                 }
             }
