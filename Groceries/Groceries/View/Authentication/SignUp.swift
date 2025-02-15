@@ -17,95 +17,97 @@ struct SignUp: View {
     @EnvironmentObject var authVieModel:AuthViewModel
     
     var body: some View {
-        VStack {
-            Image("logo")
-                .resizable()
-                .scaledToFill()
-                .frame(width: 100,height: 120)
-                .padding(.vertical,32)
-            
-            VStack(spacing: 24) {
-                InputView(text: $email,
-                          title: "Email",
-                          placeholder: "your_email@example.com",
-                          isSecureField: false)
-                .autocapitalization(.none)
+        ScrollView {
+            VStack {
+                Image("logo")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 50,height: 50)
+                    .padding(.vertical,20)
                 
-                InputView(text: $name,
-                          title: "Name",
-                          placeholder: "John",
-                          isSecureField: false)
-                
-                InputView(text: $surname,
-                          title: "Surname",
-                          placeholder: "Doe",
-                          isSecureField: false)
-                
-                InputView(text: $password,
-                          title: "Password",
-                          placeholder: "your_password",
-                          isSecureField: true)
-                
-                ZStack(alignment:.trailing) {
-                    InputView(text: $confirmPassword,
-                              title: "Confirm Password",
-                              placeholder: "confirm_password",
+                VStack(spacing: 24) {
+                    InputView(text: $email,
+                              title: "Email",
+                              placeholder: "your_email@example.com",
+                              isSecureField: false)
+                    .autocapitalization(.none)
+                    
+                    InputView(text: $name,
+                              title: "Name",
+                              placeholder: "John",
+                              isSecureField: false)
+                    
+                    InputView(text: $surname,
+                              title: "Surname",
+                              placeholder: "Doe",
+                              isSecureField: false)
+                    
+                    InputView(text: $password,
+                              title: "Password",
+                              placeholder: "your_password",
                               isSecureField: true)
                     
-                    if !password.isEmpty && !confirmPassword.isEmpty {
-                        if password == confirmPassword {
-                            Image(systemName: "checkmark.circle.fill")
-                                .imageScale(.large)
-                                .fontWeight(.bold)
-                                .foregroundColor(Color(.systemGreen))
-                        } else {
-                            Image(systemName: "xmark.circle.fill")
-                                .imageScale(.large)
-                                .fontWeight(.bold)
-                                .foregroundColor(Color(.systemRed))
+                    ZStack(alignment:.trailing) {
+                        InputView(text: $confirmPassword,
+                                  title: "Confirm Password",
+                                  placeholder: "confirm_password",
+                                  isSecureField: true)
+                        
+                        if !password.isEmpty && !confirmPassword.isEmpty {
+                            if password == confirmPassword {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .imageScale(.large)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color(.systemGreen))
+                            } else {
+                                Image(systemName: "xmark.circle.fill")
+                                    .imageScale(.large)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color(.systemRed))
+                            }
                         }
                     }
+                    
+                    Spacer()
+                    
+                    Button {
+                        Task{
+                            try await authVieModel.signUp(withEmail: email,
+                                                          password: password,
+                                                          name: name,
+                                                          surname: surname)
+                        }
+                    } label: {
+                        HStack{
+                            Text("Sign up")
+                                .fontWeight(.semibold)
+                        }
+                        .foregroundColor(.white)
+                        .frame(width: UIScreen.main.bounds.width-32,height: 48)
+                        
+                    }
+                    .background(Color(.systemBlue))
+                    .cornerRadius(30)
+                    .padding(.top,24)
+                    
                 }
+                .padding(.horizontal)
+                .padding(.top,12)
                 
                 Spacer()
                 
                 Button {
-                    Task{
-                        try await authVieModel.signUp(withEmail: email,
-                                                        password: password,
-                                                        name: name,
-                                                        surname: surname)
-                    }
+                    dismiss()
                 } label: {
-                    HStack{
-                        Text("Sign  up")
-                            .fontWeight(.semibold)
+                    HStack (spacing:4) {
+                        Text("Already have account?")
+                        Text("Sign in")
+                            .fontWeight(.bold)
                     }
-                    .foregroundColor(.white)
-                    .frame(width: UIScreen.main.bounds.width-32,height: 48)
-                    
                 }
-                .background(Color(.systemBlue))
-                .cornerRadius(30)
-                .padding(.top,24)
+                .font(.system(size:20))
                 
             }
-            .padding(.horizontal)
-            .padding(.top,12)
-            
-            Spacer()
-        
-            Button {
-                dismiss()
-            } label: {
-                HStack (spacing:4) {
-                    Text("Already have account?")
-                    Text("Sign in")
-                        .fontWeight(.bold)
-                }
-            }
-            .font(.system(size:20))
-
         }
         
     }
