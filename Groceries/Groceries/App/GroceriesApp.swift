@@ -12,7 +12,6 @@ import Firebase
 struct GroceriesApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject var authViewModel = AuthViewModel()
-
     
     var body: some Scene {
         WindowGroup {

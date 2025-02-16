@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct ProductList: Codable, Identifiable {
-    let id: UUID
-    let name: String
-    let products: [Product]?
+struct ProductList: Codable, Identifiable, Hashable {
+    let id: String
+    var name: String
+    var productIDs: [String : Int]?
 }

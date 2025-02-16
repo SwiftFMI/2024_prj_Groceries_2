@@ -17,6 +17,7 @@ protocol Authenticatable {
 @MainActor
 class AuthViewModel: ObservableObject {
     @Published var user: User?
+    @Published var userViewModel: UserViewModel = UserViewModel(user: nil)
     @Published var userSession: FirebaseAuth.User?
     
     init() {
@@ -67,7 +68,27 @@ class AuthViewModel: ObservableObject {
     func fetchUser() async  {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        guard let snapshotData = try? await Firestore.firestore().collection("users").document(uid).getDocument() else { return }
+        guard let snapshotData = try? await Firestore.firestore().collection("users").document(uid).getDocument() else {
+            return
+        }
+        if let rawData = snapshotData.data() {
+            print(rawData)
+        } else {
+            print("No Raw data")
+        }
         self.user = try? snapshotData.data(as: User.self)
+        
+//        self.user?.productLists = [
+//            ProductList(id: UUID.init().uuidString, name: "List1", productIDs: [productMock1[0].id : 3,
+//                                                                                productMock1[1].id : 3
+//                                                                               ]),
+//            ProductList(id: UUID.init().uuidString, name: "List2", productIDs: [productMock2[0].id : 2,
+//                                                                                productMock2[1].id : 5,
+//                                                                                productMock2[2].id : 1
+//                                                                               ]),
+//            ProductList(id: UUID.init().uuidString, name: "List3", productIDs: [productMock3[0].id : 20])
+//        ]
+        
+        self.userViewModel.updateUser(user: self.user)
     }
 }

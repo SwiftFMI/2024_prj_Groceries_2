@@ -11,10 +11,10 @@ import SwiftUI
 struct ProductBoxView: View {
     @State var product: Product
     var didAddCart:( ()->() )?
-    var discountPrice: Double {
-        guard let percent = product.discount?.percent else { return product.price }
-        return product.price - product.price * percent / 100
-    }
+//    var discountPrice: Double {
+//        guard let percent = product.discounts?.percent else { return product.price }
+//        return product.price - product.price * percent / 100
+//    }
     
     var body: some View {
         VStack {
@@ -32,7 +32,8 @@ struct ProductBoxView: View {
             
             Spacer()
             HStack{
-                    Text("$\(discountPrice, specifier: "%.2f" )")
+                Text("$\(product.price, specifier: "%.2f" )")
+//                    Text("$\(discountPrice, specifier: "%.2f" )")
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundColor(.black)
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
@@ -68,7 +69,7 @@ struct ProductBoxView_Previews: PreviewProvider {
                                       image: "apples",
                                       categoryName: "Fruits",
                                       brandName: "FreshFruits",
-                                      discount: Discount(id: UUID.init(), startDate: Date(), endDate: Calendar.current.date(byAdding: .day, value: 7, to: Date())!, percent: 25)
+                                      discountIDs: [discountsMock[0].id, discountsMock[3].id]
 //                                      startDate: Date(),
 //                                      endDate: Calendar.current.date(byAdding: .day, value: 7, to: Date())!,
 //                                      offerPrice: 1.49))

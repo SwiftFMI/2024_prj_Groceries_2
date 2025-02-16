@@ -9,12 +9,14 @@ import SwiftUI
 
 struct MainTabView: View {
     @StateObject var homeViewModel = HomeViewModel.shared
+    let listTabViewMidel = ListTabViewModel()
     
     var body: some View {
         VStack {
             TabView(selection: $homeViewModel.selectTab) {
                 HomeView().tag(0)
-                ExploreView().tag(1)
+//                ExploreView().tag(1)
+                ProductListsView().tag(1).environmentObject(listTabViewMidel)
                 ExploreView().tag(2)
                 Profile().tag(3)
                 ExploreView().tag(4)

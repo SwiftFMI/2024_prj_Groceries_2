@@ -57,8 +57,8 @@ struct Profile: View {
                                               image: "apples",
                                               categoryName: "Fruits",
                                               brandName: "FreshFruits",
-                                              discount: Discount(id: UUID.init(), startDate: Date(), endDate: Calendar.current.date(byAdding: .day, value: 7, to: Date())!, percent: 25)
-        //                                      startDate: Date(),
+                                              discountIDs: [discountsMock[0].id, discountsMock[3].id]
+                                              //                                      startDate: Date(),
         //                                      endDate: Calendar.current.date(byAdding: .day, value: 7, to: Date())!,
         //                                      offerPrice: 1.49))
                                              ))

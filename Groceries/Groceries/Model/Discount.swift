@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct Discount: Identifiable, Codable {
-    let id: UUID
+struct Discount: Identifiable, Codable, Hashable {
+    let id: String
     let startDate: Date
     let endDate: Date
     let percent: Double
