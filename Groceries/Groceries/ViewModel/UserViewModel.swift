@@ -17,12 +17,16 @@ struct UserListProducts {
 }
 
 class UserViewModel: ObservableObject {
+    private let db = Firestore.firestore()
+    
     @Published var user: User? = nil
     @Published var listsProducts: [ProductList]?
     @Published var products: [Product]?
     @Published var discounts: [Discount]?
     
     @Published var userListProducts: UserListProducts = UserListProducts()
+    
+    
 
     
     init(user: User?) {
@@ -57,7 +61,6 @@ class UserViewModel: ObservableObject {
     
     func fetchProducts(list: ProductList) async -> [Product] {
         var products: [Product] = []
-        let db = Firestore.firestore()
         guard let productIDs = list.productIDs else { return products }
         
         for (productID, _) in productIDs {
@@ -83,7 +86,6 @@ class UserViewModel: ObservableObject {
     
     func fetchDiscounts(product: Product) async -> [Discount] {
         var discounts: [Discount] = []
-        let db = Firestore.firestore()
         guard let discountIDs = product.discountIDs else { return discounts }
         
         for discountID in discountIDs {
@@ -100,4 +102,12 @@ class UserViewModel: ObservableObject {
         return discounts
     }
     
+    func addItemToDB(item: GroceriesModelProtocol) async {
+        do {
+            try await db.collection(item.collectionName).document(item.id).setData(item.toDictionary())
+            print("Document successfully written!")
+        } catch {
+            print("Error writing document: \(error)")
+        }
+    }
 }

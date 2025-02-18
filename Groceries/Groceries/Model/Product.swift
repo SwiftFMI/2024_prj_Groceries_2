@@ -15,48 +15,41 @@ struct Product: Identifiable, Codable, Hashable {
     let categoryName: String
     let image: String
     let brandName: String
+    let shopName: String
     let discountIDs: [String]?
-//    var startDate: Date?
-//    var endDate: Date?
-//    var offerPrice: Double?
     
     
-    //Only for testing
     init(id: String = UUID().uuidString,
          name: String,
          price: Double,
-         image: String = "",
          categoryName:String = "",
+         image: String = "",
          brandName: String = "",
-//         startDate: Date = Date(),
-//         endDate: Date = Date(),
-//         offerPrice: Double? = nil
+         shopName: String = "",
          discountIDs: [String]?) {
-        self.id = id
+        self.id = UUID().uuidString
         self.name = name
         self.price = price
         self.image = image
         self.categoryName = categoryName
         self.brandName = brandName
+        self.shopName = shopName
         self.discountIDs = discountIDs
-        
-        //                self.startDate = startDate
-        //                self.endDate = endDate
-        //                self.offerPrice = offerPrice
     }
     
     enum CodingKeys: String, CodingKey {
-            case id, name, price, categoryName, image, brandName, discountIDs
-        }
+        case id, name, price, categoryName, image, brandName, shopName, discountIDs
+    }
     
     init(from decoder: Decoder) throws {
-           let container = try decoder.container(keyedBy: CodingKeys.self)
-           self.id = try container.decodeIfPresent(String.self, forKey: .id) ?? UUID().uuidString
-           self.name = try container.decode(String.self, forKey: .name)
-           self.price = try container.decode(Double.self, forKey: .price)
-           self.categoryName = try container.decodeIfPresent(String.self, forKey: .categoryName) ?? ""
-           self.image = try container.decodeIfPresent(String.self, forKey: .image) ?? ""
-           self.brandName = try container.decodeIfPresent(String.self, forKey: .brandName) ?? ""
-           self.discountIDs = try container.decodeIfPresent([String].self, forKey: .discountIDs)
-       }
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decodeIfPresent(String.self, forKey: .id) ?? UUID().uuidString
+        self.name = try container.decode(String.self, forKey: .name)
+        self.price = try container.decode(Double.self, forKey: .price)
+        self.categoryName = try container.decodeIfPresent(String.self, forKey: .categoryName) ?? ""
+        self.image = try container.decodeIfPresent(String.self, forKey: .image) ?? ""
+        self.brandName = try container.decodeIfPresent(String.self, forKey: .brandName) ?? ""
+        self.shopName = try container.decodeIfPresent(String.self, forKey: .shopName) ?? ""
+        self.discountIDs = try container.decodeIfPresent([String].self, forKey: .discountIDs)
+    }
 }

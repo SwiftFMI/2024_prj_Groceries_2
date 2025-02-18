@@ -66,8 +66,8 @@ struct ProductBoxView_Previews: PreviewProvider {
     static var previews: some View {
         ProductBoxView(product: .init(name: "Apple",
                                       price: 1.99,
-                                      image: "apples",
                                       categoryName: "Fruits",
+                                      image: "apples",
                                       brandName: "FreshFruits",
                                       discountIDs: [discountsMock[0].id, discountsMock[3].id]
 //                                      startDate: Date(),
