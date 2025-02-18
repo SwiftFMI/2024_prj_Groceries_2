@@ -52,6 +52,16 @@ struct Profile: View {
                     }
                     
                 }
+                ProductBoxView(product: .init(name: "Apple",
+                                              price: 1.99,
+                                              image: "apples",
+                                              categoryName: "Fruits",
+                                              brandName: "FreshFruits",
+                                              discountIDs: [discountsMock[0].id, discountsMock[3].id]
+                                              //                                      startDate: Date(),
+        //                                      endDate: Calendar.current.date(byAdding: .day, value: 7, to: Date())!,
+        //                                      offerPrice: 1.49))
+                                             ))
             }
 
         }
