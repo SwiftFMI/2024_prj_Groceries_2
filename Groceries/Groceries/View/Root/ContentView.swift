@@ -9,16 +9,16 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
-    
+    @EnvironmentObject var productViewModel: ProductViewModel
     var body: some View {
-        Group {
-            if authViewModel.userSession != nil {
-                HomeView()
-            }
-            else{
-                SignIn()
-            }
-        }
+                Group {
+                    if authViewModel.userSession != nil {
+                        HomeView()
+                    }
+                    else{
+                        SignIn()
+                    }
+                }
     }
 }
 

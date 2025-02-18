@@ -12,11 +12,13 @@ import Firebase
 struct GroceriesApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject var authViewModel = AuthViewModel()
+    @StateObject var productViewModel = ProductViewModel()
 
     
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(productViewModel)
                 .environmentObject(authViewModel)
         }
     }

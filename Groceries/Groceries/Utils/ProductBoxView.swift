@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 //TODO
 struct ProductBoxView: View {
@@ -13,7 +14,7 @@ struct ProductBoxView: View {
     var didAddCart:( ()->() )?
     var body: some View {
         VStack {
-            Image(product.image)
+            WebImage(url: URL(string: product.image ))
             .resizable()
             .scaledToFit()
             .frame(width: 100, height: 80)
@@ -27,7 +28,7 @@ struct ProductBoxView: View {
             
             Spacer()
             HStack{
-                    Text("$\(product.offerPrice ?? product.price, specifier: "%.2f" )")
+                    Text("$\( product.price, specifier: "%.2f" )")
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundColor(.black)
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
@@ -60,12 +61,7 @@ struct ProductBoxView_Previews: PreviewProvider {
     static var previews: some View {
         ProductBoxView(product: .init(name: "Apple",
                                       price: 1.99,
-                                      image: "apples",
-                                      categoryName: "Fruits",
-                                      brandName: "FreshFruits",
-                                      startDate: Date(),
-                                      endDate: Calendar.current.date(byAdding: .day, value: 7, to: Date())!,
-                                      offerPrice: 1.49))
-        
+                                      image:"https://assets.clevelandclinic.org/transform/LargeFeatureImage/cd71f4bd-81d4-45d8-a450-74df78e4477a/Apples-184940975-770x533-1_jpg",
+                                      shopName: "FreshFruits"))
     }
 }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject var homeViewModel: HomeViewModel = .shared
+    @EnvironmentObject var productViewModel: ProductViewModel
     var body: some View {
         ZStack {
             ScrollView {
@@ -25,13 +26,30 @@ struct HomeView: View {
             .padding(.top)
             
             TitleTextFieldView(title: "Exclusive offer", titleAll: "See All") {
-                         
+                
             }
             .padding(.horizontal, 20)
             
             ScrollView(.horizontal) {
                 LazyHStack {
-                    //TODO Връзка с offerArr за дисплейване на продукти които са оферта
+                    if productViewModel.products.isEmpty {
+                                        ProgressView("Loading products...")
+                                            .padding()
+                                    } else {
+                                        // Вместо List, използваме ForEach
+                                        ForEach(productViewModel.products) { product in
+                                            ProductBoxView(product: product, didAddCart: {
+                                                // Логика за добавяне в количка
+                                            })
+                                            .padding(.leading, 16)
+                                        }
+                    }
+                }
+            }
+            .onAppear() {
+                Task {
+                    await productViewModel.fetchProducts()
+                    print("Fetchnahme")
                 }
             }
         }
