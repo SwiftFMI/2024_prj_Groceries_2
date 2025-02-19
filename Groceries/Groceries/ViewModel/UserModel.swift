@@ -22,12 +22,14 @@ class UserModel: ObservableObject {
     @Published var user: User?
     @Published var userItems: UserItems = UserItems()
     @Published var userSession: FirebaseAuth.User?
+    @Published var isLoading: Bool = true
     
     init() {
         self.userSession = Auth.auth().currentUser
         
         Task {
             await fetchUser()
+            self.isLoading = false
         }
     }
     
@@ -36,8 +38,9 @@ class UserModel: ObservableObject {
             let result = try await Auth.auth().signIn(withEmail: email, password: password)
             self.userSession = result.user
             await fetchUser()
+            self.isLoading = false
         } catch {
-            
+            self.isLoading = false
         }
     }
     
@@ -77,10 +80,8 @@ class UserModel: ObservableObject {
         if let rawData = snapshotData.data() {
             print(rawData)
         } else {
-            print("No Raw data")
         }
         guard let user = try? snapshotData.data(as: User.self) else {
-            print("COULDN't DECODE")
             return
         }
         
@@ -179,6 +180,21 @@ class UserModel: ObservableObject {
 
             try await userRef.updateData([
                 "productLists" : toUpload
+            ])
+            print("Lists successfully updated!")
+        } catch {
+            print("Error writing document: \(error)")
+        }
+    }
+    
+    func updateSingleListsToDB(list: ProductList) async {
+        do {
+            guard let user = self.user else { return }
+            let listRef = Firestore.firestore().collection("users").document(user.id).collection(list.collectionName).document(list.id)
+            let productIDs = list.productIDs ?? ["test" : 5]
+
+            try await listRef.updateData([
+                "productIDs" : productIDs
             ])
             print("Lists successfully updated!")
         } catch {
