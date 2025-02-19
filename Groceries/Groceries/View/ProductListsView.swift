@@ -28,8 +28,6 @@ struct ProductListsView: View {
                             ForEach(productList, id: \.id) { list in
                                 Button {
                                     listTabViewModel.navigationPath.append(list)
-                                    print("PP: path BEFORE: \(listTabViewModel.navigationPath.count)")
-                                    
                                 } label: {
                                     Text(list.name)
                                         .foregroundStyle(.primary)
@@ -43,9 +41,7 @@ struct ProductListsView: View {
                         HStack {
                             Spacer()
                             Button {
-                                print("YY: path: \(listTabViewModel.navigationPath)")
                                 isAddListSheetPresented.toggle()
-                                print("YY: path: \(listTabViewModel.navigationPath)")
                             } label: {
                                 Image(systemName: "plus.square.fill")
                                     .resizable()
@@ -66,21 +62,6 @@ struct ProductListsView: View {
             }
             .navigationDestination(for: ProductList.self) { productList in
                 SingleListView(list: productList)
-                    .padding(.top)
-                    .navigationBarBackButtonHidden(true)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            HStack {
-                                Image(systemName: "chevron.backward")
-                                    .foregroundStyle(Color.accentColor)
-                                Button("All Lists") {
-                                    print("PP: after \(listTabViewModel.navigationPath.count)")
-                                    listTabViewModel.navigationPath.removeLast()
-                                }
-                            }
-                            .padding()
-                        }
-                    }
             }
         }
     }

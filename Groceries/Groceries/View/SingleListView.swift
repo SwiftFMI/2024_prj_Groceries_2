@@ -36,6 +36,19 @@ struct SingleListView: View {
                         }
                     }
                 }
+                .navigationBarBackButtonHidden(true)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        HStack {
+                            Image(systemName: "chevron.backward")
+                                .foregroundStyle(Color.accentColor)
+                            Button("All Lists") {
+                                listTabViewModel.navigationPath.removeLast()
+                            }
+                        }
+                        .padding()
+                    }
+                }
             }
             .navigationDestination(for: String.self) { productID in
                 Text("ProductID: \(productID)")
