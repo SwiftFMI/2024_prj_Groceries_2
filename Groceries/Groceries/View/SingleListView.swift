@@ -11,7 +11,7 @@ import SwiftUI
 struct SingleListView: View {
     @State var list: ProductList
     @EnvironmentObject var listTabViewModel: ListTabViewModel
-    @EnvironmentObject var authViewMode: AuthViewModel
+    @EnvironmentObject var authViewMode: UserModel
     
     var body: some View {
             VStack {
@@ -22,9 +22,8 @@ struct SingleListView: View {
                     if let productIDs = list.productIDs {
                         ForEach(Array(productIDs.keys), id: \.self) { product in
                             Button {
-                                let test = authViewMode.userViewModel.userListProducts.products
-                                if let prod = authViewMode.userViewModel.userListProducts.products.first(where: { $0.id == product }) {
-                                    listTabViewModel.navigationPath.append(prod)
+                                if let prod = list.productIDs?.first(where: { $0.key == product }) {
+                                    listTabViewModel.navigationPath.append(prod.key)
                                 }
                             } label: {
                                 HStack {
@@ -38,9 +37,12 @@ struct SingleListView: View {
                     }
                 }
             }
-            .navigationDestination(for: Product.self) { product in
-                Text(":P")
+            .navigationDestination(for: String.self) { productID in
+                Text("ProductID: \(productID)")
             }
+//            .navigationDestination(for: Product.self) { product in
+//                Text(":P")
+//            }
 //        }
     }
 }

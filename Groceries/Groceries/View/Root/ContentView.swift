@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var authViewModel: AuthViewModel
+    @EnvironmentObject var authViewModel: UserModel
 //    var userViewModel: UserViewModel = UserViewModel(user: nil)
     
     var body: some View {

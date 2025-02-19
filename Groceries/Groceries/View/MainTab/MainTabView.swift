@@ -16,11 +16,12 @@ struct MainTabView: View {
             TabView(selection: $homeViewModel.selectTab) {
                 HomeView().tag(0)
 //                ExploreView().tag(1)
-                ProductListsView().tag(1).environmentObject(listTabViewMidel)
+                ProductListsView().tag(1)
                 ExploreView().tag(2)
                 Profile().tag(3)
                 ExploreView().tag(4)
             }
+            .environmentObject(listTabViewMidel)
             .onAppear{
                 UIScrollView.appearance().isScrollEnabled = false
             }

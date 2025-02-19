@@ -9,8 +9,9 @@ import Foundation
 import SwiftUI
 
 struct ProductListsView: View {
-    @EnvironmentObject var viewModel: AuthViewModel
+    @EnvironmentObject var viewModel: UserModel
     @EnvironmentObject var listTabViewModel: ListTabViewModel
+    @State var isAddListSheetPresented: Bool = false
     
     var body: some View {
         NavigationStack(path: $listTabViewModel.navigationPath) {
@@ -20,18 +21,47 @@ struct ProductListsView: View {
                     .font(.title)
                 
                 Spacer()
-                if let productList = viewModel.userViewModel.user?.productLists {
+                ZStack {
                     List {
-                        ForEach(productList, id: \.id) { list in
-                            Button {
-                                listTabViewModel.navigationPath.append(list)
-                            } label: {
-                                Text(list.name)
-                                    .foregroundStyle(.primary)
+                        if let productList = viewModel.user?.productLists {
+                            
+                            ForEach(productList, id: \.id) { list in
+                                Button {
+                                    listTabViewModel.navigationPath.append(list)
+                                    print("PP: path BEFORE: \(listTabViewModel.navigationPath.count)")
+                                    
+                                } label: {
+                                    Text(list.name)
+                                        .foregroundStyle(.primary)
+                                }
+                                .contentShape(Rectangle())
                             }
-                            .contentShape(Rectangle())
                         }
                     }
+                    VStack{
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            Button {
+                                print("YY: path: \(listTabViewModel.navigationPath)")
+                                isAddListSheetPresented.toggle()
+                                print("YY: path: \(listTabViewModel.navigationPath)")
+                            } label: {
+                                Image(systemName: "plus.square.fill")
+                                    .resizable()
+                                    .frame(width: 70, height: 70)
+                                    .padding()
+                                    .foregroundColor(.blue)
+                                    .shadow(color: .gray, radius: 5, x: 5, y: 5)
+                            }
+                            .sheet(isPresented: $isAddListSheetPresented) {
+                                AddListViewL(isPresented: $isAddListSheetPresented)
+                                    .presentationDetents([.medium])
+                                    .presentationDragIndicator(.automatic)
+                            }
+                        }
+                    }
+
                 }
             }
             .navigationDestination(for: ProductList.self) { productList in
@@ -44,15 +74,13 @@ struct ProductListsView: View {
                                 Image(systemName: "chevron.backward")
                                     .foregroundStyle(Color.accentColor)
                                 Button("All Lists") {
+                                    print("PP: after \(listTabViewModel.navigationPath.count)")
                                     listTabViewModel.navigationPath.removeLast()
                                 }
                             }
                             .padding()
                         }
                     }
-            }
-            .navigationDestination(for: Product.self) { product in
-                Text(":P")
             }
         }
     }

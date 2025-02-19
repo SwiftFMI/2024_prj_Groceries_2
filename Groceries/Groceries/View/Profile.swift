@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct Profile: View {
-    @EnvironmentObject var authViewModel: AuthViewModel
+    @EnvironmentObject var authViewModel: UserModel
     var body: some View {
         if let user = authViewModel.user {
             List {

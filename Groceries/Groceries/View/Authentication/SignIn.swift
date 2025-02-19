@@ -11,7 +11,7 @@ struct SignIn: View {
     
     @State private var email = ""
     @State private var password = ""
-    @EnvironmentObject var authViewModel:AuthViewModel
+    @EnvironmentObject var authViewModel:UserModel
     
     var body: some View {
         NavigationStack {

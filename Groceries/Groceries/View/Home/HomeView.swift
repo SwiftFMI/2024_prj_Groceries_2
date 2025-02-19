@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject var homeViewModel: HomeViewModel = .shared
-    @EnvironmentObject var authViewModel: AuthViewModel
+    @EnvironmentObject var authViewModel: UserModel
     
     var body: some View {
         VStack {
@@ -41,7 +41,7 @@ struct HomeView: View {
             Button {
                 products.forEach { product in
                     Task {
-                        await authViewModel.userViewModel.addItemToDB(item: product)
+                        await authViewModel.addItemToDB(item: product)
                     }
                 }
             } label: {
