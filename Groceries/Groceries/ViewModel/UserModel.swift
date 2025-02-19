@@ -14,8 +14,6 @@ protocol Authenticatable {
     var formIsValid:Bool { get }
 }
 
-
-
 @MainActor
 class UserModel: ObservableObject {
     
@@ -81,12 +79,13 @@ class UserModel: ObservableObject {
         } else {
             print("No Raw data")
         }
-        guard let user = try? snapshotData.data(as: User.self) else { return }
+        guard let user = try? snapshotData.data(as: User.self) else {
+            print("COULDN't DECODE")
+            return
+        }
         
         self.user = user
         
-        
-        guard let user = self.user else { return }
         Task {
             await fetchData()
         }
@@ -94,7 +93,9 @@ class UserModel: ObservableObject {
     
     func addList(name: String) {
         self.user?.productLists?.append(ProductList(name: name))
-        self.user = user
+        Task {
+            await self.updateUserListsToDB()
+        }
     }
     
     func fetchData() async {
@@ -162,6 +163,24 @@ class UserModel: ObservableObject {
         do {
             try await db.collection(item.collectionName).document(item.id).setData(item.toDictionary())
             print("Document successfully written!")
+        } catch {
+            print("Error writing document: \(error)")
+        }
+    }
+    
+    func updateUserListsToDB() async {
+        do {
+            guard let user = self.user else { return }
+            let userRef = Firestore.firestore().collection("users").document(user.id)
+            let productLists = user.productLists ?? []
+            let toUpload = productLists.map{ list in
+                list.toDictionary()
+            }
+
+            try await userRef.updateData([
+                "productLists" : toUpload
+            ])
+            print("Lists successfully updated!")
         } catch {
             print("Error writing document: \(error)")
         }

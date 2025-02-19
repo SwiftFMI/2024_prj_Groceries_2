@@ -17,6 +17,14 @@ struct AddListViewL: View {
         VStack {
             HStack {
                 Button {
+                    isPresented = false
+                } label: {
+                    Text("Cancel")
+                }
+                .padding()
+                .foregroundStyle(.blue)
+                Spacer()
+                Button {
                     authViewModel.addList(name: listName)
                     isPresented.toggle()
                 } label: {
@@ -24,16 +32,8 @@ struct AddListViewL: View {
                         .padding()
                         .foregroundStyle(.blue)
                 }
-                Spacer()
-                Button {
-                    isPresented = false
-                } label: {
-                    Text("Cancel")
-                }
-                .padding()
-                .foregroundStyle(.blue)
-
             }
+            
             TextField("Name your list", text: $listName, axis: .vertical)
                 .textFieldStyle(.roundedBorder)
                 .padding()

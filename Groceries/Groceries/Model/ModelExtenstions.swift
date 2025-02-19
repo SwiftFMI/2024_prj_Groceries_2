@@ -47,16 +47,16 @@ extension Product: GroceriesModelProtocol {
     }
 }
 
-//extension ProductList: GroceriesModelProtocol {
-//    var collectionName: String {
-//        ""
-//    }
-//    
-//    func toDictionary() -> [String : Any] {
-//        [
-//            "id" : self.id,
-//            "name" : self.name,
-//            "productIDs" : self.productIDs ?? []
-//        ]
-//    }
-//}
+extension ProductList: GroceriesModelProtocol {
+    var collectionName: String {
+        "productLists"
+    }
+    
+    func toDictionary() -> [String : Any] {
+        [
+            "id" : self.id,
+            "name" : self.name,
+            "productIDs" : self.productIDs ?? []
+        ]
+    }
+}
