@@ -63,6 +63,9 @@ struct ProductListsView: View {
             .navigationDestination(for: ProductList.self) { productList in
                 SingleListView(list: productList)
             }
+            .navigationDestination(for: Product.self) { product in
+                ProductView(product: product)
+            }
         }
     }
 }

@@ -100,6 +100,8 @@ class UserModel: ObservableObject {
     }
     
     func fetchData() async {
+        self.userItems = .init()
+        
         guard let productLists = user?.productLists else { return }
         self.userItems.lists = productLists
         
@@ -107,13 +109,14 @@ class UserModel: ObservableObject {
         
         for list in lists {
             let products = await self.fetchProducts(list: list)
-            self.userItems.products = Array(Set(products))
+            self.userItems.products.append(contentsOf: Array(Set(products)))
+            print("CASHED")
         }
         
         let products = userItems.products
         for product in products {
             let discounts = await self.fetchDiscounts(product: product)
-            self.userItems.discounts = Array(Set(discounts))
+            self.userItems.discounts.append(contentsOf: Array(Set(discounts)))
         }
     }
     
@@ -147,14 +150,24 @@ class UserModel: ObservableObject {
         guard let discountIDs = product.discountIDs else { return discounts }
         
         for discountID in discountIDs {
-            do {
-                let document = try await db.collection("discount").document(discountID).getDocument()
-                
-                if let discount = try document.data(as: Discount?.self) {
-                    discounts.append(discount)
+            if let discount = self.userItems.discounts.first(where: { $0.id == discountID }) {
+                discounts.append(discount)
+            } else {
+                do {
+                    let document = try await db.collection("discounts").document(discountID).getDocument().data()
+                   
+                    if
+                        let id = document?["id"] as? String,
+                        let startTimestamp = document?["startDate"] as? Timestamp,
+                        let endTimestamp = document?["endDate"] as? Timestamp,
+                        let percent = document!["percent"] as? Double {
+                        let startDate = Date(timeIntervalSince1970: TimeInterval(startTimestamp.seconds))
+                        let endDate = Date(timeIntervalSince1970: TimeInterval(endTimestamp.seconds))
+                        discounts.append(Discount(id: id, startDate: startDate, endDate: endDate, percent: percent))
+                    }
+                } catch {
+                    print("Error fetching discount with ID \(discountID): \(error)")
                 }
-            } catch {
-                print("Error fetching discount with ID \(discountID): \(error)")
             }
         }
         return discounts

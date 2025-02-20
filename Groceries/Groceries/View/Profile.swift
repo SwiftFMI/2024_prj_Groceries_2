@@ -57,11 +57,12 @@ struct Profile: View {
                                               categoryName: "Fruits",
                                               image: "apples",
                                               brandName: "FreshFruits",
-                                              discountIDs: [discountsMock[0].id, discountsMock[3].id]
+                                              discountIDs: [/*discountsMock[0].id, discountsMock[3].id*/]
                                               //                                      startDate: Date(),
         //                                      endDate: Calendar.current.date(byAdding: .day, value: 7, to: Date())!,
         //                                      offerPrice: 1.49))
-                                             ))
+                                             ),
+                               amount: 5)
             }
 
         }

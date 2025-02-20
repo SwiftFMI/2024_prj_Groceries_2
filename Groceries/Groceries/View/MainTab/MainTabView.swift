@@ -19,7 +19,7 @@ struct MainTabView: View {
                 ProductListsView().tag(1)
                 ExploreView().tag(2)
                 Profile().tag(3)
-                ExploreView().tag(4)
+//                ExploreView().tag(4)
             }
             .environmentObject(listTabViewMidel)
             .onAppear{
@@ -51,7 +51,7 @@ struct MainTabView: View {
                 }
                 TabButtonView(title: "Explore",
                               icon: "magnifyingglass",
-                              isSelect: homeViewModel.selectTab == 2){
+                              isSelect: homeViewModel.selectTab == 2) {
 //                    DispatchQueue.main.async {
                         withAnimation {
                             homeViewModel.selectTab = 2
@@ -60,7 +60,7 @@ struct MainTabView: View {
                 }
                 TabButtonView(title: "Account",
                               icon: "person.crop.circle",
-                              isSelect: homeViewModel.selectTab == 3){
+                              isSelect: homeViewModel.selectTab == 3) {
 //                    DispatchQueue.main.async {
                         withAnimation {
                             homeViewModel.selectTab = 3
