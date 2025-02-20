@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct MainTabView: View {
-    @StateObject var homeViewModel = HomeViewModel.shared
-    let listTabViewMidel = ListTabViewModel()
+    @StateObject var homeViewModel = HomeViewModel()
     
     var body: some View {
         VStack {
@@ -21,7 +20,6 @@ struct MainTabView: View {
                 Profile().tag(3)
 //                ExploreView().tag(4)
             }
-            .environmentObject(listTabViewMidel)
             .onAppear{
                 UIScrollView.appearance().isScrollEnabled = false
             }
@@ -34,37 +32,29 @@ struct MainTabView: View {
                 TabButtonView(title: "Stores",
                               icon: "storefront.fill",
                               isSelect: homeViewModel.selectTab == 0){
-//                    DispatchQueue.main.async {
                         withAnimation {
                             homeViewModel.selectTab = 0
                         }
-//                    }
                 }
                 TabButtonView(title: "Cart",
                               icon: "cart.fill",
                               isSelect: homeViewModel.selectTab == 1){
-//                    DispatchQueue.main.async {
                         withAnimation {
                             homeViewModel.selectTab = 1
                         }
-//                    }
                 }
                 TabButtonView(title: "Explore",
                               icon: "magnifyingglass",
                               isSelect: homeViewModel.selectTab == 2) {
-//                    DispatchQueue.main.async {
                         withAnimation {
                             homeViewModel.selectTab = 2
                         }
-//                    }
                 }
                 TabButtonView(title: "Account",
                               icon: "person.crop.circle",
                               isSelect: homeViewModel.selectTab == 3) {
-//                    DispatchQueue.main.async {
                         withAnimation {
                             homeViewModel.selectTab = 3
-//                        }
                     }
                 }
             }

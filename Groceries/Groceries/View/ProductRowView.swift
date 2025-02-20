@@ -39,19 +39,28 @@ struct ProductRowView: View {
     
     var body: some View {
         HStack {
-            Text(product.name)
-                .padding()
-            Text("\(amount)")
-                .padding(10)
-                .background(
-                    Circle()
-                        .fill(.gray)
-                )
-                .foregroundColor(.white)
+            VStack(alignment: .leading) {
+                Text(product.name)
+                    .font(.headline)
+                    .tint(.black)
+                Text(product.brandName)
+                    .tint(.gray)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+            if amount > 0 {
+                Text("\(amount)")
+                    .padding(10)
+                    .background(
+                        Circle()
+                            .fill(.gray)
+                    )
+                    .foregroundColor(.white)
+            }
             
             
             Spacer()
-            if let discountPrice = self.discountPrice, discountPrice <= self.product.price {
+            if let discountPrice = self.discountPrice, discountPrice < self.product.price {
                 
                 Text("\(self.product.price, specifier: "%.2f")")
                     .strikethrough(true, color: .red)

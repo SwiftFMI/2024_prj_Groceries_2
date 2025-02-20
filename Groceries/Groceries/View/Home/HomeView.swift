@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var homeViewModel: HomeViewModel = .shared
+    @StateObject var homeViewModel: HomeViewModel = HomeViewModel()
     @EnvironmentObject var authViewModel: UserModel
     
     var body: some View {

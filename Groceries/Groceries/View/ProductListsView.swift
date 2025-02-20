@@ -10,11 +10,10 @@ import SwiftUI
 
 struct ProductListsView: View {
     @EnvironmentObject var viewModel: UserModel
-    @EnvironmentObject var listTabViewModel: ListTabViewModel
     @State var isAddListSheetPresented: Bool = false
     
     var body: some View {
-        NavigationStack(path: $listTabViewModel.navigationPath) {
+        NavigationStack(path: $viewModel.navigationPath) {
             VStack {
                 Text("\(viewModel.user?.name ?? "")'s Lists")
                     .fontWeight(.bold)
@@ -27,7 +26,7 @@ struct ProductListsView: View {
                             
                             ForEach(productList, id: \.id) { list in
                                 Button {
-                                    listTabViewModel.navigationPath.append(list)
+                                    viewModel.navigationPath.append(list.id)
                                 } label: {
                                     Text(list.name)
                                         .foregroundStyle(.primary)
@@ -60,11 +59,10 @@ struct ProductListsView: View {
 
                 }
             }
-            .navigationDestination(for: ProductList.self) { productList in
-                SingleListView(list: productList)
-            }
-            .navigationDestination(for: Product.self) { product in
-                ProductView(product: product)
+            .navigationDestination(for: String.self) { id in
+                if let list = viewModel.user?.productLists?.first(where: { $0.id == id }) {
+                    SingleListView(list: list)
+                }
             }
         }
     }

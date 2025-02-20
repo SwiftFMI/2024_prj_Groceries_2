@@ -9,6 +9,7 @@ import Foundation
 import Firebase
 import FirebaseAuth
 import FirebaseFirestore
+import SwiftUI
 
 protocol Authenticatable {
     var formIsValid:Bool { get }
@@ -17,12 +18,13 @@ protocol Authenticatable {
 @MainActor
 class UserModel: ObservableObject {
     
-    private let db = Firestore.firestore()
+//    private let db = Firestore.firestore()
     
     @Published var user: User?
     @Published var userItems: UserItems = UserItems()
     @Published var userSession: FirebaseAuth.User?
     @Published var isLoading: Bool = true
+    @Published var navigationPath = NavigationPath() 
     
     init() {
         self.userSession = Auth.auth().currentUser
@@ -103,24 +105,29 @@ class UserModel: ObservableObject {
         self.userItems = .init()
         
         guard let productLists = user?.productLists else { return }
-        self.userItems.lists = productLists
+        self.userItems.lists = Set(productLists)
         
         let lists = userItems.lists
         
         for list in lists {
             let products = await self.fetchProducts(list: list)
-            self.userItems.products.append(contentsOf: Array(Set(products)))
+            products.forEach { product in
+                self.userItems.products.insert(product)
+            }
             print("CASHED")
         }
         
         let products = userItems.products
         for product in products {
             let discounts = await self.fetchDiscounts(product: product)
-            self.userItems.discounts.append(contentsOf: Array(Set(discounts)))
+            discounts.forEach { discount in
+                self.userItems.discounts.insert(discount)
+            }
         }
     }
     
     func fetchProducts(list: ProductList) async -> [Product] {
+        let db = Firestore.firestore()
         var products: [Product] = []
         guard let productIDs = list.productIDs else { return products }
         
@@ -146,6 +153,7 @@ class UserModel: ObservableObject {
     }
     
     func fetchDiscounts(product: Product) async -> [Discount] {
+        let db = Firestore.firestore()
         var discounts: [Discount] = []
         guard let discountIDs = product.discountIDs else { return discounts }
         
@@ -174,6 +182,7 @@ class UserModel: ObservableObject {
     }
     
     func addItemToDB(item: GroceriesModelProtocol) async {
+        let db = Firestore.firestore()
         do {
             try await db.collection(item.collectionName).document(item.id).setData(item.toDictionary())
             print("Document successfully written!")
@@ -183,9 +192,10 @@ class UserModel: ObservableObject {
     }
     
     func updateUserListsToDB() async {
+        let db = Firestore.firestore()
         do {
             guard let user = self.user else { return }
-            let userRef = Firestore.firestore().collection("users").document(user.id)
+            let userRef = db.collection("users").document(user.id)
             let productLists = user.productLists ?? []
             let toUpload = productLists.map{ list in
                 list.toDictionary()
@@ -201,9 +211,10 @@ class UserModel: ObservableObject {
     }
     
     func updateSingleListsToDB(list: ProductList) async {
+        let db = Firestore.firestore()
         do {
             guard let user = self.user else { return }
-            let listRef = Firestore.firestore().collection("users").document(user.id).collection(list.collectionName).document(list.id)
+            let listRef = db.collection("users").document(user.id).collection(list.collectionName).document(list.id)
             let productIDs = list.productIDs ?? ["test" : 5]
 
             try await listRef.updateData([
@@ -213,5 +224,51 @@ class UserModel: ObservableObject {
         } catch {
             print("Error writing document: \(error)")
         }
+    }
+    
+    func addProductToList(list: ProductList, product: Product, amount: Int) {
+        
+        guard let user = self.user else { return }
+        
+        guard let listIndex = user.productLists?.firstIndex(where: { $0.id == list.id }) else { return }
+        
+        var rawList = user.productLists?[listIndex]
+        
+        if let curr = rawList?.productIDs?[product.id] {
+            self.user?.productLists?[listIndex].productIDs?[product.id]! += amount
+            self.user?.productLists?[listIndex].productIDs?[product.id]! += amount
+        } else {
+            if self.user?.productLists?[listIndex].productIDs != nil {
+                self.user?.productLists?[listIndex].productIDs?[product.id] = amount
+            } else {
+                self.user?.productLists?[listIndex].productIDs = [product.id : amount]
+            }
+        }
+        
+        self.userItems.products.insert(product)
+        
+    }
+    
+    func searchProducts(byName name: String) async -> [Product] {
+        let db = Firestore.firestore()
+        var searchResults: [Product] = []
+        let toLowerName = name.lowercased()
+        
+        do {
+            let products = try await db.collection("products")
+                .whereField("toLowerName", isGreaterThanOrEqualTo: toLowerName)
+                .whereField("toLowerName", isLessThanOrEqualTo: toLowerName + "\u{f8ff}")
+                .getDocuments()
+            
+            for document in products.documents {
+                if let product = try? document.data(as: Product.self) {
+                    searchResults.append(product)
+                }
+            }
+        } catch {
+            print("Error searching products: \(error.localizedDescription)")
+        }
+        
+        return searchResults
     }
 }
