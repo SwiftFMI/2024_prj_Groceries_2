@@ -210,22 +210,6 @@ class UserModel: ObservableObject {
         }
     }
     
-    func updateSingleListsToDB(list: ProductList) async {
-        let db = Firestore.firestore()
-        do {
-            guard let user = self.user else { return }
-            let listRef = db.collection("users").document(user.id).collection(list.collectionName).document(list.id)
-            let productIDs = list.productIDs ?? ["test" : 5]
-
-            try await listRef.updateData([
-                "productIDs" : productIDs
-            ])
-            print("Lists successfully updated!")
-        } catch {
-            print("Error writing document: \(error)")
-        }
-    }
-    
     func addProductToList(list: ProductList, product: Product, amount: Int) {
         
         guard let user = self.user else { return }
@@ -236,7 +220,6 @@ class UserModel: ObservableObject {
         
         if let curr = rawList?.productIDs?[product.id] {
             self.user?.productLists?[listIndex].productIDs?[product.id]! += amount
-            self.user?.productLists?[listIndex].productIDs?[product.id]! += amount
         } else {
             if self.user?.productLists?[listIndex].productIDs != nil {
                 self.user?.productLists?[listIndex].productIDs?[product.id] = amount
@@ -246,7 +229,32 @@ class UserModel: ObservableObject {
         }
         
         self.userItems.products.insert(product)
+        guard let listToUpdate = self.user?.productLists?.first(where: { $0.id == list.id }) else { return }
+        Task {
+            await self.updateUserListsToDB()
+        }
         
+    }
+    
+    func removeProductFromList(list: ProductList, product: Product) {
+        
+        guard let user = self.user else { return }
+        
+        guard let listIndex = user.productLists?.firstIndex(where: { $0.id == list.id }) else { return }
+        
+        let rawList = user.productLists?[listIndex]
+        
+        if rawList?.productIDs?[product.id] != nil {
+            self.user?.productLists?[listIndex].productIDs?[product.id]! -= 1
+            if self.user?.productLists?[listIndex].productIDs?[product.id]! == 0 {
+                self.userItems.products.remove(product)
+                self.user?.productLists?[listIndex].productIDs?.removeValue(forKey: product.id)
+            }
+            
+            Task {
+                await self.updateUserListsToDB()
+            }
+        }
     }
     
     func searchProducts(byName name: String) async -> [Product] {

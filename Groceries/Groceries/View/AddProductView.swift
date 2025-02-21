@@ -54,6 +54,7 @@ struct AddProductView: View {
                                 Spacer()
                                 Button {
                                     userModel.addProductToList(list: self.list, product: product.wrappedValue, amount: 1)
+                                    
                                     showPurchaseNotification()
                                 } label: {
                                     Image(systemName: "plus")
@@ -70,7 +71,7 @@ struct AddProductView: View {
                 }
             }
             if showNotification {
-                           NotificationView()
+                NotificationView(text: "Item Added to List!")
                                .transition(.move(edge: .top).combined(with: .opacity))
                                .zIndex(1)
                        }
@@ -105,10 +106,11 @@ struct AddProductView: View {
 }
 
 struct NotificationView: View {
+    let text: String
     var body: some View {
         VStack {
             HStack {
-                Text("Item Added to List!")
+                Text(text)
                     .foregroundColor(.white)
                     .font(.headline)
                     .padding()
