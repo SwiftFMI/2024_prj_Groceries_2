@@ -38,15 +38,15 @@ struct HomeView: View {
                     }
                 }
             }
-//            Button {
-//                products.forEach { product in
-//                    Task {
-//                        await authViewModel.addItemToDB(item: product)
-//                    }
-//                }
-//            } label: {
-//                Text("Add 5 products to db")
-//            }
+            Button {
+                products.forEach { product in
+                    Task {
+                        await authViewModel.addItemToDB(item: product)
+                    }
+                }
+            } label: {
+                Text("Add 5 products to db")
+            }
         }
     }
 }

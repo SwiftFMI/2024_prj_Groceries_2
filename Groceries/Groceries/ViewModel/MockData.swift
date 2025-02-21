@@ -28,55 +28,55 @@
 //]
 //
 //
-//let products: [Product] = [
-//    Product(
-//        id: "prod1",
-//        name: "Apple iPhone 14",
-//        price: 999.99,
-//        categoryName: "Electronics",
-//        image: "iphone14.jpg",
-//        brandName: "Apple",
-//        shopName: "TechWorld",
-//        discountIDs: ["discount1", "discount2"]
-//    ),
-//    Product(
-//        id: "prod2",
-//        name: "Nike Air Max 270",
-//        price: 129.99,
-//        categoryName: "Footwear",
-//        image: "airmax270.jpg",
-//        brandName: "Nike",
-//        shopName: "ShoeStore",
-//        discountIDs: ["discount3"]
-//    ),
-//    Product(
-//        id: "prod3",
-//        name: "Samsung Galaxy S23",
-//        price: 899.99,
-//        categoryName: "Electronics",
-//        image: "galaxyS23.jpg",
-//        brandName: "Samsung",
-//        shopName: "TechHub",
-//        discountIDs: nil
-//    ),
-//    Product(
-//        id: "prod4",
-//        name: "Sony WH-1000XM5 Headphones",
-//        price: 349.99,
-//        categoryName: "Accessories",
-//        image: "sonyHeadphones.jpg",
-//        brandName: "Sony",
-//        shopName: "AudioWorld",
-//        discountIDs: ["discount4"]
-//    ),
-//    Product(
-//        id: "prod5",
-//        name: "Levi's 501 Original Jeans",
-//        price: 59.99,
-//        categoryName: "Clothing",
-//        image: "levis501.jpg",
-//        brandName: "Levi's",
-//        shopName: "FashionHouse",
-//        discountIDs: nil
-//    )
-//]
+let products: [Product] = [
+    Product(
+        id: "prod1",
+        name: "Apple iPhone 14",
+        price: 999.99,
+        categoryName: "Electronics",
+        image: "iphone14.jpg",
+        brandName: "Apple",
+        shopName: "Amazon",
+        discountIDs: ["pjBe6lcAEqxkvbTtW5Pi", "2sc7t5BDktgQjycwUpEm"]
+    ),
+    Product(
+        id: "prod2",
+        name: "Nike Air Max 270",
+        price: 129.99,
+        categoryName: "Footwear",
+        image: "airmax270.jpg",
+        brandName: "Nike",
+        shopName: "Amazon",
+        discountIDs: ["pjBe6lcAEqxkvbTtW5Pi"]
+    ),
+    Product(
+        id: "prod3",
+        name: "Samsung Galaxy S23",
+        price: 899.99,
+        categoryName: "Electronics",
+        image: "galaxyS23.jpg",
+        brandName: "Samsung",
+        shopName: "Amazon",
+        discountIDs: ["2sc7t5BDktgQjycwUpEm"]
+    ),
+    Product(
+        id: "prod4",
+        name: "Sony WH-1000XM5 Headphones",
+        price: 349.99,
+        categoryName: "Accessories",
+        image: "sonyHeadphones.jpg",
+        brandName: "Sony",
+        shopName: "Amazon",
+        discountIDs: ["pjBe6lcAEqxkvbTtW5Pi"]
+    ),
+    Product(
+        id: "prod5",
+        name: "Levi's 501 Original Jeans",
+        price: 59.99,
+        categoryName: "Clothing",
+        image: "levis501.jpg",
+        brandName: "Levi's",
+        shopName: "Amazon",
+        discountIDs: nil
+    )
+]

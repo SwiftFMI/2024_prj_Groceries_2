@@ -42,7 +42,8 @@ extension Product: GroceriesModelProtocol {
             "image": self.image,
             "brandName": self.brandName,
             "shopName": self.shopName,
-            "discountIDs": self.discountIDs ?? []
+            "discountIDs": self.discountIDs ?? [],
+            "toLowerName" : self.toLowerName
         ]
     }
 }

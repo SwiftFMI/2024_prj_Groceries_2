@@ -44,7 +44,9 @@ struct Profile: View {
                     }
                     
                     Button {
-                        print("Delete account")
+                        Task {
+                            await self.authViewModel.deleteAccount()
+                        }
                     } label: {
                         SettingsRowView(imageName: "person.crop.circle.badge.xmark",
                                         title: "Delete Account",
@@ -52,17 +54,6 @@ struct Profile: View {
                     }
                     
                 }
-                ProductBoxView(product: .init(name: "Apple",
-                                              price: 1.99,
-                                              categoryName: "Fruits",
-                                              image: "apples",
-                                              brandName: "FreshFruits",
-                                              discountIDs: [/*discountsMock[0].id, discountsMock[3].id*/]
-                                              //                                      startDate: Date(),
-        //                                      endDate: Calendar.current.date(byAdding: .day, value: 7, to: Date())!,
-        //                                      offerPrice: 1.49))
-                                             ),
-                               amount: 5)
             }
 
         }

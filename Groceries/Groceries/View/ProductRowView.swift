@@ -16,23 +16,11 @@ struct ProductRowView: View {
     @State var discountPrice: Double?
     
     private func calculateDiscount() {
-        var price = product.price
         Task {
-            var discounts:[Discount] = []
-            
-            let currDate = Date()
-            
-            discounts = await userModel.fetchDiscounts(product: product)
-            
-            for discount in discounts {
-                if discount.startDate < currDate, discount.endDate > currDate {
-                    price -= product.price * discount.percent / 100
-                }
+            let price = await self.userModel.calculateDiscountforProduct(product: self.product)
+            DispatchQueue.main.async {
+                self.discountPrice = price
             }
-        }
-        
-        DispatchQueue.main.async {
-            self.discountPrice = price
         }
     }
     
@@ -60,19 +48,22 @@ struct ProductRowView: View {
             
             
             Spacer()
-            if let discountPrice = self.discountPrice, discountPrice < self.product.price {
-                
-                Text("\(self.product.price, specifier: "%.2f")")
-                    .strikethrough(true, color: .red)
-                Text("\(discountPrice, specifier: "%.2f")")
-                    .padding(5)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(.green.opacity(50))
-                    )
-                    .foregroundColor(.white)
-            } else {
-                Text("\(self.product.price, specifier: "%.2f")")
+            VStack {
+                if let discountPrice = self.discountPrice, discountPrice < self.product.price {
+                    
+                    Text("\(self.product.price, specifier: "%.2f")")
+                        .strikethrough(true, color: .red)
+                    Text("\(discountPrice, specifier: "%.2f")")
+                        .padding(5)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(.green.opacity(50))
+                        )
+                        .foregroundColor(.white)
+                } else {
+                    Text("\(self.product.price, specifier: "%.2f")")
+                }
+                Text("\(product.shopName)")
             }
         }
         .onAppear {

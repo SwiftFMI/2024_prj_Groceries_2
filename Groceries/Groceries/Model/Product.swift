@@ -17,6 +17,7 @@ struct Product: Identifiable, Codable, Hashable {
     let brandName: String
     let shopName: String
     let discountIDs: [String]?
+    let toLowerName: String
     
     
     init(id: String = UUID().uuidString,
@@ -35,6 +36,7 @@ struct Product: Identifiable, Codable, Hashable {
         self.brandName = brandName
         self.shopName = shopName
         self.discountIDs = discountIDs
+        self.toLowerName = name.lowercased()
     }
     
     enum CodingKeys: String, CodingKey {
@@ -51,5 +53,6 @@ struct Product: Identifiable, Codable, Hashable {
         self.brandName = try container.decodeIfPresent(String.self, forKey: .brandName) ?? ""
         self.shopName = try container.decodeIfPresent(String.self, forKey: .shopName) ?? ""
         self.discountIDs = try container.decodeIfPresent([String].self, forKey: .discountIDs)
+        self.toLowerName = self.name.lowercased()
     }
 }

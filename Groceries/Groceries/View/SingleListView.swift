@@ -19,6 +19,12 @@ struct SingleListView: View {
     @State var isAddProductSheetPresented: Bool = false
     @State var showNotification: Bool = false
     @State var isRemoveButtonDisabled:  Bool = false
+    @State var totalPrice: Double = 0.0
+    @State var bestDeal: (String, Double) = ("", 0.0)
+    
+    var actualList: ProductList? {
+        userViewModel.user?.productLists?.first(where: { $0.id == self.list.id })
+    }
     
     var products: [ProductAmount] {
         var pairs: [ProductAmount] = []
@@ -33,12 +39,26 @@ struct SingleListView: View {
         return pairs
     }
     
+    private func calculateTotalPrice() {
+        Task {
+            if let list = self.actualList {
+                let price = await self.userViewModel.calculateListTotalPrice(list: list)
+                let bestDeal = await self.userViewModel.findBestShopForList(list: list)
+                DispatchQueue.main.async {
+                    self.totalPrice = price
+                    self.bestDeal = bestDeal
+                }
+            }
+        }
+    }
+
     var body: some View {
         ZStack {
             VStack {
                 Text("\(list.name)")
                     .fontWeight(.bold)
                     .font(.title)
+                Text("\(self.totalPrice, specifier: "%.2f")")
                 ZStack {
                     List {
                         ForEach(self.products, id: \.self) { product in
@@ -46,8 +66,8 @@ struct SingleListView: View {
                                 ProductRowView(product: product.product, amount: product.amount)
                                 Spacer()
                                 Button {
-                                    print("pressed")
                                     userViewModel.removeProductFromList(list: self.list, product: product.product)
+                                    self.calculateTotalPrice()
                                     showRemoveNotification()
                                 } label: {
                                     Image(systemName: "minus")
@@ -85,11 +105,23 @@ struct SingleListView: View {
                         }
                     }
                 }
+                VStack {
+                    Text("Best deal in: \(self.bestDeal.0)")
+                    Text("\(self.bestDeal.1, specifier: "%.2f")")
+                }
             }
             if showNotification {
                 NotificationView(text: "Item Removed from List!")
                     .transition(.move(edge: .top).combined(with: .opacity))
                     .zIndex(1)
+            }
+        }
+        .onAppear {
+            self.calculateTotalPrice()
+        }
+        .onChange(of: self.isAddProductSheetPresented) { oldValue, newValue in
+            if newValue == false {
+                self.calculateTotalPrice()
             }
         }
     }

@@ -53,6 +53,7 @@ class UserModel: ObservableObject {
             let user =  User(id: result.user.uid, name: name, surname: surname, email: email)
             let encodedUser = try Firestore.Encoder().encode(user)
             try await Firestore.firestore().collection("users").document(user.id).setData(encodedUser)
+            self.user = user
         } catch {
             print("Debug:failed to create user with error\(error.localizedDescription)")
         }
@@ -68,9 +69,22 @@ class UserModel: ObservableObject {
         }
     }
     
-    func deleteAccount() {
-//        guard let user = Auth.auth().currentUser else { return }
-              //TODO
+    func deleteAccount() async {
+        guard let currentUser = Auth.auth().currentUser else { return }
+        
+        do {
+            let userId = currentUser.uid
+            try await Firestore.firestore().collection("users").document(userId).delete()
+            print("User data successfully deleted from Firestore.")
+            
+            try await currentUser.delete()
+            print("User account successfully deleted.")
+            
+            self.userSession = nil
+            self.user = nil
+        } catch {
+            print("Error deleting account: \(error.localizedDescription)")
+        }
     }
     
     func fetchUser() async  {
@@ -95,7 +109,11 @@ class UserModel: ObservableObject {
     }
     
     func addList(name: String) {
-        self.user?.productLists?.append(ProductList(name: name))
+        if self.user?.productLists != nil {
+            self.user?.productLists?.append(ProductList(name: name))
+        } else {
+            self.user?.productLists = [ProductList(name: name)]
+        }
         Task {
             await self.updateUserListsToDB()
         }
@@ -150,6 +168,68 @@ class UserModel: ObservableObject {
             }
         }
         return products
+    }
+    
+    func fetchProductsByName(name: String) async -> [Product] {
+        let db = Firestore.firestore()
+        var products: [Product] = []
+
+        let lowercasedName = name.lowercased()
+
+        do {
+            let snapshot = try await db.collection("products")
+                .whereField("toLowerName", isGreaterThanOrEqualTo: lowercasedName)
+                .whereField("toLowerName", isLessThanOrEqualTo: lowercasedName + "\u{f8ff}")
+                .getDocuments()
+            
+            for document in snapshot.documents {
+                if let product = try? document.data(as: Product.self) {
+                    products.append(product)
+                }
+            }
+        } catch {
+            print("Error fetching products with name \(name): \(error)")
+        }
+        
+        return products
+    }
+    
+    func findBestShopForList(list: ProductList) async -> (String, Double) {
+        var bestShop = ("", 0.0)
+        var shops: [String : Double] = [:]
+        
+        guard let productIDs = list.productIDs else { return bestShop }
+        
+        for (productID, amount) in productIDs {
+            if let product = self.userItems.products.first(where: { $0.id == productID }) {
+                let matchingProducts = await self.fetchProductsByName(name: product.name)
+                
+                for matchedProduct in matchingProducts {
+                    let discounts = await self.fetchDiscounts(product: matchedProduct)
+                    var productPrice = matchedProduct.price
+                    
+                    for discount in discounts {
+                        let currDate = Date()
+                        if discount.startDate < currDate && discount.endDate > currDate {
+                            productPrice = productPrice - productPrice * discount.percent / 100
+                        }
+                    }
+                    let totalPrice = productPrice * Double(amount)
+                    
+                    if let currShopPrice = shops[matchedProduct.shopName] {
+                        shops[matchedProduct.shopName] = currShopPrice + totalPrice
+                    } else {
+                        shops[matchedProduct.shopName] = totalPrice
+                    }
+                }
+            }
+        }
+        
+        if let best = shops.min(by: { a, b in a.value < b.value }) {
+            bestShop.0 = best.key
+            bestShop.1 = best.value
+        }
+        return bestShop
     }
     
     func fetchDiscounts(product: Product) async -> [Discount] {
@@ -278,5 +358,37 @@ class UserModel: ObservableObject {
         }
         
         return searchResults
+    }
+    
+    func calculateDiscountforProduct(product: Product) async -> Double {
+        var price = product.price
+        
+            var discounts:[Discount] = []
+            
+            let currDate = Date()
+            
+            discounts = await self.fetchDiscounts(product: product)
+            
+            for discount in discounts {
+                if discount.startDate < currDate, discount.endDate > currDate {
+                    print("minus")
+                    price -= product.price * discount.percent / 100
+                }
+            }
+        print("\(price)")
+        return price
+    }
+    
+    func calculateListTotalPrice(list: ProductList) async -> Double {
+        var totalPrice = 0.0
+        guard let productIDs = list.productIDs else { return totalPrice }
+        for (productID, amount) in productIDs {
+            if let product = self.userItems.products.first(where: { $0.id == productID }) {
+                let discountPrice = await self.calculateDiscountforProduct(product: product)
+                totalPrice += discountPrice * Double(amount)
+            }
+        }
+
+        return totalPrice
     }
 }
