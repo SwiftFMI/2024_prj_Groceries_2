@@ -119,6 +119,15 @@ class UserModel: ObservableObject {
         }
     }
     
+    func removeList(name: String) {
+        guard let index = self.user?.productLists?.firstIndex(where: { $0.name == name }) else { return }
+        self.user?.productLists?.remove(at: index)
+        
+        Task {
+            await self.updateUserListsToDB()
+        }
+    }
+    
     func fetchData() async {
         self.userItems = .init()
         
