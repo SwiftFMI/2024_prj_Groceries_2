@@ -23,15 +23,16 @@ struct TabButtonView: View {
                        .resizable()
                        .scaledToFit()
                        .frame(width: 25, height: 25)
-                   
-                   
                    Text(title)
                        .font(.footnote)
-                   
-                       
                }
+               .background(
+                Color(UIColor.systemBackground)
+                    .opacity(isSelect ? 0.2 : 0)
+                    .cornerRadius(8)
+               )
            }
-           .foregroundColor(isSelect ? .green : .black)
+           .foregroundColor(isSelect ? .blue : .primary)
            .frame(minWidth: 0, maxWidth: .infinity)
        }
 }

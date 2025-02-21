@@ -47,7 +47,6 @@ struct ProductListsView: View {
                                     .frame(width: 70, height: 70)
                                     .padding()
                                     .foregroundColor(.blue)
-                                    .shadow(color: .gray, radius: 5, x: 5, y: 5)
                             }
                             .sheet(isPresented: $isAddListSheetPresented) {
                                 AddListViewL(isPresented: $isAddListSheetPresented)
