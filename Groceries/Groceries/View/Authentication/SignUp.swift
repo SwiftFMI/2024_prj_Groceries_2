@@ -14,7 +14,7 @@ struct SignUp: View {
     @State private var password: String = ""
     @State private var confirmPassword: String = ""
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var authVieModel:AuthViewModel
+    @EnvironmentObject var authVieModel:UserModel
     
     var body: some View {
         ScrollView {

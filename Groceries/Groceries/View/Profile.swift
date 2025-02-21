@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct Profile: View {
-    @EnvironmentObject var authViewModel: AuthViewModel
+    @EnvironmentObject var authViewModel: UserModel
     var body: some View {
         if let user = authViewModel.user {
             List {
@@ -44,7 +44,9 @@ struct Profile: View {
                     }
                     
                     Button {
-                        print("Delete account")
+                        Task {
+                            await self.authViewModel.deleteAccount()
+                        }
                     } label: {
                         SettingsRowView(imageName: "person.crop.circle.badge.xmark",
                                         title: "Delete Account",
@@ -52,16 +54,6 @@ struct Profile: View {
                     }
                     
                 }
-                ProductBoxView(product: .init(name: "Apple",
-                                              price: 1.99,
-                                              image: "apples",
-                                              categoryName: "Fruits",
-                                              brandName: "FreshFruits",
-                                              discountIDs: [discountsMock[0].id, discountsMock[3].id]
-                                              //                                      startDate: Date(),
-        //                                      endDate: Calendar.current.date(byAdding: .day, value: 7, to: Date())!,
-        //                                      offerPrice: 1.49))
-                                             ))
             }
 
         }

@@ -8,64 +8,55 @@
 import SwiftUI
 
 struct MainTabView: View {
-    @StateObject var homeViewModel = HomeViewModel.shared
-    let listTabViewMidel = ListTabViewModel()
+    @StateObject var homeViewModel = HomeViewModel()
     
     var body: some View {
         VStack {
             TabView(selection: $homeViewModel.selectTab) {
-                HomeView().tag(0)
+//                HomeView().tag(0)
 //                ExploreView().tag(1)
-                ProductListsView().tag(1).environmentObject(listTabViewMidel)
-                ExploreView().tag(2)
-                Profile().tag(3)
-                ExploreView().tag(4)
+                ProductListsView().tag(0)
+//                ExploreView().tag(2)
+                Profile().tag(1)
+//                ExploreView().tag(4)
             }
             .onAppear{
                 UIScrollView.appearance().isScrollEnabled = false
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
-            .onChange(of: homeViewModel.selectTab) { newValue in
+            .onChange(of: homeViewModel.selectTab) { oldValue, newValue in
                 debugPrint("Sel tab:|\(newValue)|\n")
             }
             
             HStack {
-                TabButtonView(title: "Stores",
-                              icon: "storefront.fill",
+                TabButtonView(title: "Lists",
+                              icon: "list.bullet.rectangle.portrait",
                               isSelect: homeViewModel.selectTab == 0){
-//                    DispatchQueue.main.async {
                         withAnimation {
                             homeViewModel.selectTab = 0
                         }
-//                    }
-                }
-                TabButtonView(title: "Cart",
-                              icon: "cart.fill",
-                              isSelect: homeViewModel.selectTab == 1){
-//                    DispatchQueue.main.async {
-                        withAnimation {
-                            homeViewModel.selectTab = 1
-                        }
-//                    }
-                }
-                TabButtonView(title: "Explore",
-                              icon: "magnifyingglass",
-                              isSelect: homeViewModel.selectTab == 2){
-//                    DispatchQueue.main.async {
-                        withAnimation {
-                            homeViewModel.selectTab = 2
-                        }
-//                    }
                 }
                 TabButtonView(title: "Account",
                               icon: "person.crop.circle",
-                              isSelect: homeViewModel.selectTab == 3){
-//                    DispatchQueue.main.async {
+                              isSelect: homeViewModel.selectTab == 1){
                         withAnimation {
-                            homeViewModel.selectTab = 3
-//                        }
-                    }
+                            homeViewModel.selectTab = 1
+                        }
                 }
+//                TabButtonView(title: "Explore",
+//                              icon: "magnifyingglass",
+//                              isSelect: homeViewModel.selectTab == 2) {
+//                        withAnimation {
+//                            homeViewModel.selectTab = 2
+//                        }
+//                }
+//                TabButtonView(title: "Account",
+//                              icon: "person.crop.circle",
+//                              isSelect: homeViewModel.selectTab == 3) {
+//                        withAnimation {
+//                            homeViewModel.selectTab = 3
+//                    }
+//                }
             }
         }
         

@@ -9,50 +9,60 @@ import Foundation
 import SwiftUI
 
 struct ProductListsView: View {
-    @EnvironmentObject var viewModel: AuthViewModel
-    @EnvironmentObject var listTabViewModel: ListTabViewModel
+    @EnvironmentObject var viewModel: UserModel
+    @State var isAddListSheetPresented: Bool = false
     
     var body: some View {
-        NavigationStack(path: $listTabViewModel.navigationPath) {
+        NavigationStack(path: $viewModel.navigationPath) {
             VStack {
                 Text("\(viewModel.user?.name ?? "")'s Lists")
                     .fontWeight(.bold)
                     .font(.title)
                 
                 Spacer()
-                if let productList = viewModel.userViewModel.user?.productLists {
+                ZStack {
                     List {
-                        ForEach(productList, id: \.id) { list in
-                            Button {
-                                listTabViewModel.navigationPath.append(list)
-                            } label: {
-                                Text(list.name)
-                                    .foregroundStyle(.primary)
+                        if let productList = viewModel.user?.productLists {
+                            
+                            ForEach(productList, id: \.id) { list in
+                                Button {
+                                    viewModel.navigationPath.append(list.id)
+                                } label: {
+                                    Text(list.name)
+                                        .foregroundStyle(.primary)
+                                }
+                                .contentShape(Rectangle())
                             }
-                            .contentShape(Rectangle())
                         }
                     }
+                    VStack{
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            Button {
+                                isAddListSheetPresented.toggle()
+                            } label: {
+                                Image(systemName: "plus.square.fill")
+                                    .resizable()
+                                    .frame(width: 70, height: 70)
+                                    .padding()
+                                    .foregroundColor(.blue)
+                                    .shadow(color: .gray, radius: 5, x: 5, y: 5)
+                            }
+                            .sheet(isPresented: $isAddListSheetPresented) {
+                                AddListViewL(isPresented: $isAddListSheetPresented)
+                                    .presentationDetents([.medium])
+                                    .presentationDragIndicator(.automatic)
+                            }
+                        }
+                    }
+
                 }
             }
-            .navigationDestination(for: ProductList.self) { productList in
-                SingleListView(list: productList)
-                    .padding(.top)
-                    .navigationBarBackButtonHidden(true)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            HStack {
-                                Image(systemName: "chevron.backward")
-                                    .foregroundStyle(Color.accentColor)
-                                Button("All Lists") {
-                                    listTabViewModel.navigationPath.removeLast()
-                                }
-                            }
-                            .padding()
-                        }
-                    }
-            }
-            .navigationDestination(for: Product.self) { product in
-                Text(":P")
+            .navigationDestination(for: String.self) { id in
+                if let list = viewModel.user?.productLists?.first(where: { $0.id == id }) {
+                    SingleListView(list: list)
+                }
             }
         }
     }

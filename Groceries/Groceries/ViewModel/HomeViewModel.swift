@@ -9,13 +9,8 @@ import Foundation
 import SwiftUI
 
 class HomeViewModel : ObservableObject {
-    static let shared = HomeViewModel()
     @Published var selectTab: Int = 0
     @Published var txtSearch: String = ""
-    
     @Published var offerArr: [Product] = []
-        
-        private init() {}
-    
 }
 
